@@ -36,6 +36,11 @@
 #define SC_ThreadJoin   15
 
 #define SC_Add		42
+#define SC_Sub      43
+//SECTION 3 IN PROJECT
+#define SC_ReadNum  44
+#define SC_PrintNum 45
+#define SC_RandomNum    46
 
 #ifndef IN_ASM
 
@@ -58,8 +63,26 @@ void Halt();
  */ 
 
 int Add(int op1, int op2);
+/*
+ * Sub the two operants and return the result
+ */ 
 
-/* Address space control operations: Exit, Exec, Execv, and Join */
+int Sub(int op1, int op2);
+/*
+ * Read one num entered by the user
+ */ 
+int ReadNum();
+/*
+ * Write one num out the console
+ */ 
+void PrintNum(int n);
+/*
+ * Return a random integer number
+ */ 
+int RandomNum();
+/*
+ * Write one num out the console
+ */ 
 
 /* This user program is done (status = 0 means exited normally). */
 void Exit(int status);	
@@ -105,8 +128,8 @@ typedef int OpenFileId;
  * the console device.
  */
 
-#define ConsoleInput	0  
-#define ConsoleOutput	1  
+#define Console_Input	0 
+#define Console_Output	1 
  
 /* Create a Nachos file, with name "name" */
 /* Note: Create does not open the file.   */

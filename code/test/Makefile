@@ -126,12 +126,24 @@ halt: halt.o start.o
 	$(LD) $(LDFLAGS) start.o halt.o -o halt.coff
 	$(COFF2NOFF) halt.coff halt
 
+sub.o: sub.c
+	$(CC) $(CFLAGS) -c sub.c
+sub: sub.o start.o
+	$(LD) $(LDFLAGS) start.o sub.o -o sub.coff
+	$(COFF2NOFF) sub.coff sub
+
 add.o: add.c
 	$(CC) $(CFLAGS) -c add.c
 
 add: add.o start.o
 	$(LD) $(LDFLAGS) start.o add.o -o add.coff
 	$(COFF2NOFF) add.coff add
+
+ExceNum.o: ExceNum.c
+	$(CC) $(CFLAGS) -c ExceNum.c
+ExceNum: ExceNum.o start.o
+	$(LD) $(LDFLAGS) start.o ExceNum.o -o ExceNum.coff
+	$(COFF2NOFF) ExceNum.coff ExceNum
 
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c

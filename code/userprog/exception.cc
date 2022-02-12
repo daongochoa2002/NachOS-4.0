@@ -47,7 +47,7 @@
 //	"which" is the kind of exception.  The list of possible exceptions 
 //	is in machine.h.
 //----------------------------------------------------------------------
-
+void IncreasePC();
 void
 ExceptionHandler(ExceptionType which)
 {
@@ -58,26 +58,112 @@ ExceptionHandler(ExceptionType which)
     switch (which) {
     case SyscallException:
       switch(type) {
-      case SC_Halt:
-	DEBUG(dbgSys, "Shutdown, initiated by user program.\n");
+      	case SC_Halt:
+			DEBUG(dbgSys, "Shutdown, initiated by user program.\n");
 
-	SysHalt();
+			SysHalt();
 
-	ASSERTNOTREACHED();
-	break;
+			ASSERTNOTREACHED();
+			break;
 
-      case SC_Add:
-	DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
+      	case SC_Add:
+			DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
 	
-	/* Process SysAdd Systemcall*/
-	int result;
-	result = SysAdd(/* int op1 */(int)kernel->machine->ReadRegister(4),
+			/* Process SysAdd Systemcall*/
+			int result;
+			result = SysAdd(/* int op1 */(int)kernel->machine->ReadRegister(4),
 			/* int op2 */(int)kernel->machine->ReadRegister(5));
 
-	DEBUG(dbgSys, "Add returning with " << result << "\n");
-	/* Prepare Result */
-	kernel->machine->WriteRegister(2, (int)result);
+			DEBUG(dbgSys, "Add returning with " << result << "\n");
+			/* Prepare Result */
+			kernel->machine->WriteRegister(2, (int)result);
 	
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+
+	   	case SC_Sub:
+			DEBUG(dbgSys, "Sub " << kernel->machine->ReadRegister(4) << " - " << kernel->machine->ReadRegister(5) << "\n");
+	
+			/* Process SysSub Systemcall*/
+			int res;
+			res = SysSub(/* int op1 */(int)kernel->machine->ReadRegister(4),
+			/* int op2 */(int)kernel->machine->ReadRegister(5));
+
+			DEBUG(dbgSys, "Sub returning with " << res << "\n");
+			/* Prepare Result */
+			kernel->machine->WriteRegister(2, (int)res);
+	
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		case SC_ReadNum:
+			DEBUG(dbgSys, "Read a number " << kernel->machine->ReadRegister(4) << "\n");
+	
+			/* Process SysReadNum Systemcall*/
+			int number;
+			number = SysReadNum();
+
+			DEBUG(dbgSys, "The entered number is " << number << "\n");
+			/* Prepare Result */
+			kernel->machine->WriteRegister(2, (int)number);
+	
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		case SC_PrintNum:
+			DEBUG(dbgSys, "Print a number " << "\n");
+	
+			/* Process SysPrintNum Systemcall*/
+			SysPrintNum(/* int number */(int)kernel->machine->ReadRegister(4));
+	
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		case SC_RandomNum:
+			DEBUG(dbgSys, "Create a random number " << "\n");
+	
+			/* Process SysRandomNum Systemcall*/
+			int num;
+			num = SysRandomNum();
+			/* Prepare Result */
+			kernel->machine->WriteRegister(2, (int)num);
+
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+      	default:
+			cerr << "Unexpected system call " << type << "\n";
+			break;
+       }
+      break;
+    default:
+      cerr << "Unexpected user mode exception" << (int)which << "\n";
+      break;
+    }
+    ASSERTNOTREACHED();
+}
+void IncreasePC(){
 	/* Modify return point */
 	{
 	  /* set previous programm counter (debugging only)*/
@@ -89,21 +175,5 @@ ExceptionHandler(ExceptionType which)
 	  /* set next programm counter for brach execution */
 	  kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
 	}
-
 	return;
-	
-	ASSERTNOTREACHED();
-
-	break;
-
-      default:
-	cerr << "Unexpected system call " << type << "\n";
-	break;
-      }
-      break;
-    default:
-      cerr << "Unexpected user mode exception" << (int)which << "\n";
-      break;
-    }
-    ASSERTNOTREACHED();
 }
