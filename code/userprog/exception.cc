@@ -136,6 +136,20 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		case SC_ReadChar:
+			kernel->machine->WriteRegister(2, (int)SysReadChar());
+								
+			IncreasePC();
+			
+			break;
+		case SC_PrintChar:
+			char ch = (char)kernel->machine->ReadRegister(4);
+								
+			SysPrintChar(ch);
+			
+			IncreasePC();
+			
+			break;
 		case SC_RandomNum:
 			DEBUG(dbgSys, "Create a random number " << "\n");
 	

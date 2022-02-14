@@ -82,6 +82,16 @@ void SysPrintNum(int n){
     kernel->synchConsoleOut->PutChar(temp[j]);
 
 }
+char SysReadChar()
+{
+  return kernel->ConsoleGetChar();
+}
+
+void SysPrintChar(char character)
+{
+  kernel->ConsolePutChar(character);
+}
+
 unsigned int SysRandomNum(){
   RandomInit(time(0));
   return RandomNumber();

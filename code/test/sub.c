@@ -7,13 +7,8 @@
 
 #include "syscall.h"
 
-int
-main()
+int main()
 {
-  int result;
-  
-  result = Sub(42, 23);
-
-  Halt();
-  /* not reached */
+    PrintChar(ReadChar());
+    Halt();
 }
