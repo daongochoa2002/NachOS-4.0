@@ -47,7 +47,14 @@
 //	"which" is the kind of exception.  The list of possible exceptions 
 //	is in machine.h.
 //----------------------------------------------------------------------
-void IncreasePC();
+// Câu 2
+void IncreasePC()
+{
+	kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+	kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(NextPCReg));
+	kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
+}
+
 void
 ExceptionHandler(ExceptionType which)
 {
