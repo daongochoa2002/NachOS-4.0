@@ -84,12 +84,39 @@ void SysPrintNum(int n){
 }
 char SysReadChar()
 {
-  return kernel->ConsoleGetChar();
+  return kernel->synchConsoleIn->GetChar();
 }
 
 void SysPrintChar(char character)
 {
-  kernel->ConsolePutChar(character);
+  kernel->synchConsoleOut->PutChar(character);
+}
+
+void SysReadString(char *buffer, int length)
+{
+    int index;
+    char ch;
+    for (index = 0; index < length; ++index)
+        buffer[index] = 0;
+    for (index = 0; index < length;)
+    {
+        do
+        {
+            ch = kernel->synchConsoleIn->GetChar();
+        } while (ch == EOF);
+        if (ch == '\001' || ch == '\n') // End the input by Enter
+            break;
+        buffer[index++] = ch;
+    }
+}
+
+void SysPrintString(char *buffer)
+{
+    int len = 0;
+    while (buffer[len]) // loop until meet '\0'
+    {
+        kernel->synchConsoleOut->PutChar(buffer[len++]);
+    }
 }
 
 unsigned int SysRandomNum(){

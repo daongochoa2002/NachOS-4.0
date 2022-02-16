@@ -41,8 +41,10 @@
 #define SC_ReadNum  44
 #define SC_PrintNum 45
 #define SC_RandomNum    46
-#define SC_ReadChar 47
-#define SC_PrintChar 48
+#define SC_ReadChar     47
+#define SC_PrintChar    48
+#define SC_ReadString   49
+#define SC_PrintString  50
 
 #ifndef IN_ASM
 
@@ -84,6 +86,10 @@ void PrintNum(int n);
 char ReadChar();
 
 void PrintChar(char character);
+
+void ReadString(char[], int);
+
+void PrintString(char[]);
 
 int RandomNum();
 /*
