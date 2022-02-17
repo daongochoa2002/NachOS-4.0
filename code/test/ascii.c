@@ -13,8 +13,8 @@ int main()
             PrintChar(i + j);
             PrintString("\t");
         }
+        PrintString("\n");
     }
-    PrintString("\n");
 
     return 0;
 }

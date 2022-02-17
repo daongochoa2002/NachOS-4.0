@@ -93,7 +93,7 @@ RandomNum:
 	.globl ReadChar
 	.ent	ReadChar
 ReadChar:
-	addiu $2,$0,SC_readChar
+	addiu $2,$0,SC_ReadChar
 	syscall
 	j 	$31
 	.end ReadChar
@@ -120,7 +120,7 @@ PrintString:
 	addiu $2,$0,SC_PrintString
 	syscall
 	j 	$31
-	.end PrinString
+	.end PrintString
 
 	.globl Exit
 	.ent	Exit
