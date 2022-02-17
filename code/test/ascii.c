@@ -15,6 +15,7 @@ main()
             PrintChar(i + j);
             PrintString("\t");
         }
+        PrintString("\n");
     }
     PrintString("\n");
     Halt();
