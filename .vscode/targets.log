@@ -2,74 +2,40 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target 'all'.  Stop.
  
 # GNU Make 4.1
- 
 # Built for x86_64-pc-linux-gnu
- 
 # Copyright (C) 1988-2014 Free Software Foundation, Inc.
- 
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
- 
 # This is free software: you are free to change and redistribute it.
- 
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
- 
-# Make data base, printed on Thu Feb 10 19:41:20 2022
- 
+# Make data base, printed on Wed Feb 16 23:31:16 2022
 
 # Variables
- 
 
- 
 # automatic
- 
 <D = $(patsubst %/,%,$(dir $<))
- 
 # automatic
- 
 ?F = $(notdir $?)
- 
 # default
- 
 .SHELLFLAGS := -c
- 
 # environment
- 
 VSCODE_AGENT_FOLDER = /home/dnhoa20/.vscode-server
- 
 # environment
- 
 VSCODE_LOG_NATIVE = false
- 
 # automatic
- 
 ?D = $(patsubst %/,%,$(dir $?))
- 
 # automatic
- 
 @D = $(patsubst %/,%,$(dir $@))
- 
 # automatic
- 
 @F = $(notdir $@)
- 
 # default
- 
 MAKE_VERSION := 4.1
- 
 # makefile
- 
 CURDIR := /home/dnhoa20/nachos/NachOS-4.0
- 
 # makefile
- 
 SHELL = /bin/sh
- 
 # environment
- 
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
- 
 # environment
 _ = /home/dnhoa20/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326/node
 # makefile
@@ -87,9 +53,9 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 VSCODE_CWD = /home/dnhoa20
 # environment
-SSH_CONNECTION = 192.168.67.1 62805 192.168.67.130 22
+SSH_CONNECTION = 192.168.67.1 51467 192.168.67.132 22
 # environment
-PATH = /home/dnhoa20/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326/bin/remote-cli:/home/dnhoa20/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PATH = /home/dnhoa20/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -105,7 +71,7 @@ VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/dnhoa20/nachos/NachOS-4.0
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-63c50050-0b69-490d-a7a0-265c1c329c66.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-c036100b-9770-4aac-874b-5b4fdc5b99f9.sock
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
@@ -133,7 +99,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 3
 # environment
-XDG_SESSION_ID = 5
+XDG_SESSION_ID = 2
 # environment
 USER = dnhoa20
 # makefile
@@ -142,8 +108,6 @@ USER = dnhoa20
 %D = $(patsubst %/,%,$(dir $%))
 # default
 MAKE_COMMAND := make
-# environment
-OLDPWD = /home/dnhoa20/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326
 # default
 .VARIABLES := 
 # automatic
@@ -153,7 +117,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.67.1 62805 22
+SSH_CLIENT = 192.168.67.1 51467 22
 # environment
 MAIL = /var/mail/dnhoa20
 # automatic
@@ -181,7 +145,7 @@ LANG = C
 # environment
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 # variable set hash-table stats:
-# Load=67/1024=7%, Rehash=0, Collisions=8/89=9%
+# Load=66/1024=6%, Rehash=0, Collisions=8/88=9%
 
 # Pattern-specific Variable Values
 
@@ -189,9 +153,9 @@ VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 
 # Directories
 
-# . (device 2049, inode 399332): 10 files, no impossibilities.
+# . (device 2049, inode 399332): 9 files, no impossibilities.
 
-# 10 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -241,12 +205,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 18 / storage = 152 B / avg = 8 B
-# current buf: size = 8162 B / used = 152 B / count = 18 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 17 / storage = 150 B / avg = 8 B
+# current buf: size = 8162 B / used = 150 B / count = 17 / avg = 8 B
 
-# strcache performance: lookups = 21 / hit rate = 14%
+# strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
-# Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Thu Feb 10 19:41:20 2022
+# Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
+# Finished Make data base on Wed Feb 16 23:31:16 2022
 
  

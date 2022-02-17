@@ -161,7 +161,6 @@ ExceptionHandler(ExceptionType which)
 			break;
 		  }
 	   	case SC_Sub:
-		   {
 			DEBUG(dbgSys, "Sub " << kernel->machine->ReadRegister(4) << " - " << kernel->machine->ReadRegister(5) << "\n");
 	
 			/* Process SysSub Systemcall*/
@@ -180,9 +179,8 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		   }
+		   
 		case SC_ReadNum:
-		{
 			DEBUG(dbgSys, "Read a number " << kernel->machine->ReadRegister(4) << "\n");
 	
 			/* Process SysReadNum Systemcall*/
@@ -200,7 +198,6 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		}
 		case SC_PrintNum:
 			DEBUG(dbgSys, "Print a number " << "\n");
 	
@@ -219,19 +216,25 @@ ExceptionHandler(ExceptionType which)
 								
 			IncreasePC();
 			
+			return;
+	
+			ASSERTNOTREACHED();
+
 			break;
-		case SC_PrintChar:
-		{
-			char ch = (char)kernel->machine->ReadRegister(4);
-								
-			SysPrintChar(ch);
+		case SC_PrintChar:		
+			SysPrintChar((char)kernel->machine->ReadRegister(4));
 			
 			IncreasePC();
 			
+			return;
+	
+			ASSERTNOTREACHED();
+
+
 			break;
-		}
+		
 		case SC_ReadString:
-		{
+		
 			int virtAddr;
 			int length;
 			char* buffer;
@@ -251,15 +254,15 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		}
+		
 		case SC_PrintString:
-		{
-			int virtAddr;
-			char* buffer;
-			virtAddr = kernel->machine->ReadRegister(4);
-			buffer = User2System(virtAddr, 255);
-			SysPrintString(buffer);
-			delete[] buffer;
+		
+			int virtAddr1;
+			char* buffer1;
+			virtAddr1 = kernel->machine->ReadRegister(4);
+			buffer1 = User2System(virtAddr1, 255);
+			SysPrintString(buffer1);
+			delete[] buffer1;
 
 			IncreasePC();
 
@@ -268,9 +271,8 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		}
+		
 		case SC_RandomNum:
-		{
 			DEBUG(dbgSys, "Create a random number " << "\n");
 	
 			/* Process SysRandomNum Systemcall*/
@@ -286,7 +288,7 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		}
+		
 		// Cac system call chua duoc xu li thi se in ra thong bao loi
 		case SC_Exit:
 		case SC_Exec:

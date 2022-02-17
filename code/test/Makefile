@@ -126,11 +126,17 @@ halt: halt.o start.o
 	$(LD) $(LDFLAGS) start.o halt.o -o halt.coff
 	$(COFF2NOFF) halt.coff halt
 
-sub.o: sub.c
-	$(CC) $(CFLAGS) -c sub.c
-sub: sub.o start.o
-	$(LD) $(LDFLAGS) start.o sub.o -o sub.coff
-	$(COFF2NOFF) sub.coff sub
+char.o: char.c
+	$(CC) $(CFLAGS) -c char.c
+char: char.o start.o
+	$(LD) $(LDFLAGS) start.o char.o -o char.coff
+	$(COFF2NOFF) char.coff char
+
+string.o: string.c
+	$(CC) $(CFLAGS) -c string.c
+string: string.o start.o
+	$(LD) $(LDFLAGS) start.o string.o -o string.coff
+	$(COFF2NOFF) string.coff string
 
 add.o: add.c
 	$(CC) $(CFLAGS) -c add.c
@@ -150,11 +156,11 @@ help: help.o start.o
 	$(LD) $(LDFLAGS) start.o help.o -o help.coff
 	$(COFF2NOFF) help.coff help
 
-ExceNum.o: ExceNum.c
-	$(CC) $(CFLAGS) -c ExceNum.c
-ExceNum: ExceNum.o start.o
-	$(LD) $(LDFLAGS) start.o ExceNum.o -o ExceNum.coff
-	$(COFF2NOFF) ExceNum.coff ExceNum
+number.o: number.c
+	$(CC) $(CFLAGS) -c number.c
+number: number.o start.o
+	$(LD) $(LDFLAGS) start.o number.o -o number.coff
+	$(COFF2NOFF) number.coff number
 
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c

@@ -1,12 +1,14 @@
 #include "syscall.h"
 
-int main()
+int 
+main()
 {
     //In ra bang ma ascii
-    PrintString("\t\tAscii Table\n")
-    for (int i = 32; i <= 50; i++)
+    int i,j;
+    PrintString("\t\tAscii Table\n");
+    for(i = 32; i <= 50; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for(j = 0; j < 5; j++)
         {
             PrintNum(i + j * 19);
             PrintString(" - ");
@@ -15,6 +17,6 @@ int main()
         }
     }
     PrintString("\n");
-
+    Halt();
     return 0;
 }

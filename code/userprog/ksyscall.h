@@ -37,16 +37,13 @@ int SysReadNum(){
   char temp;
   bool isSign = false, isNum = true;
   //ignore the space and endline
-  for(;;){
+  do {
     temp = kernel->synchConsoleIn->GetChar();
-    if(temp == ' ' || temp == '\n')
-      continue;
-    else break;
-  } 
+  } while(temp == ' ' || temp == '\n');
   //check if the number is negative
   if(temp == '-') isSign=true;
   //check if the number is digit
-  else if(('0'<=temp&&temp<='9')) num = temp - '0';
+  else if('0'<=temp&&temp<='9') num = temp - '0';
   else if(temp != '+') isNum = false;
   //get characters from the console
   for(;;){
