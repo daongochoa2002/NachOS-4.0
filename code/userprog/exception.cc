@@ -121,8 +121,7 @@ int System2User(int virtAddr,int len,char* buffer)
 	return i; 
 } 
 
-void
-ExceptionHandler(ExceptionType which)
+void ExceptionHandler(ExceptionType which)
 {
     int type = kernel->machine->ReadRegister(2);
 
@@ -140,7 +139,7 @@ ExceptionHandler(ExceptionType which)
 			break;
 
       	case SC_Add:
-		  {
+		{
 			DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
 	
 			/* Process SysAdd Systemcall*/
@@ -159,8 +158,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		  }
+		}
 	   	case SC_Sub:
+		{
 			DEBUG(dbgSys, "Sub " << kernel->machine->ReadRegister(4) << " - " << kernel->machine->ReadRegister(5) << "\n");
 	
 			/* Process SysSub Systemcall*/
@@ -179,8 +179,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		   
+		}
 		case SC_ReadNum:
+		{
 			DEBUG(dbgSys, "Read a number " << kernel->machine->ReadRegister(4) << "\n");
 	
 			/* Process SysReadNum Systemcall*/
@@ -198,7 +199,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		}
 		case SC_PrintNum:
+		{
 			DEBUG(dbgSys, "Print a number " << "\n");
 	
 			/* Process SysPrintNum Systemcall*/
@@ -211,7 +214,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		}
 		case SC_ReadChar:
+		{
 			kernel->machine->WriteRegister(2, (int)SysReadChar());
 								
 			IncreasePC();
@@ -221,7 +226,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		case SC_PrintChar:		
+		}
+		case SC_PrintChar:	
+		{	
 			SysPrintChar((char)kernel->machine->ReadRegister(4));
 			
 			IncreasePC();
@@ -232,9 +239,9 @@ ExceptionHandler(ExceptionType which)
 
 
 			break;
-		
+		}
 		case SC_ReadString:
-		
+		{
 			int virtAddr;
 			int length;
 			char* buffer;
@@ -254,9 +261,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		
+		}
 		case SC_PrintString:
-		
+		{
 			int virtAddr1;
 			char* buffer1;
 			virtAddr1 = kernel->machine->ReadRegister(4);
@@ -271,8 +278,9 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		
+		}
 		case SC_RandomNum:
+		{
 			DEBUG(dbgSys, "Create a random number " << "\n");
 	
 			/* Process SysRandomNum Systemcall*/
@@ -288,14 +296,65 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		}
+		case SC_Create:
+		{
+			int virtAddr = kernel->machine->ReadRegister(4);
+			int length = kernel->machine->ReadRegister(5);
+			char * fileName = User2System(virtAddr, length);
+
+			if (Create(fileName))
+				kernel->machine->WriteRegister(2, 0);
+			else
+				kernel->machine->WriteRegister(2, -1);
+			
+			delete[] fileName;
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		}
+		case SC_Open:
+		{
+			int virtAddr = kernel->machine->ReadRegister(4);
+			int length = kernel->machine->ReadRegister(5);
+			char * fileName = User2System(virtAddr, length);
+
+			kernel->machine->WriteRegister(2, Open(fileName));
+
+			delete[] fileName;
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		}
+		case SC_Close:
+		{
+			int id = kernel->machine->ReadRegister(4);
+			kernel->machine->WriteRegister(2, Close(id));
+
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		}
 		
 		// Cac system call chua duoc xu li thi se in ra thong bao loi
 		case SC_Exit:
 		case SC_Exec:
 		case SC_Join:
-        case SC_Create:
+        
 		case SC_Remove:
-		case SC_Open:
+		
 		case SC_Read:
 		case SC_Write:
 		case SC_Seek:
