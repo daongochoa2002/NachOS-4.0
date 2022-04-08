@@ -120,4 +120,42 @@ unsigned int SysRandomNum(){
   RandomInit(time(0));
   return RandomNumber();
 }
+
+int Create(char *name)
+{
+  int lengthName = strlen(name);
+
+  if (lengthName == 0)
+  {
+    DEBUG(dbgSys, "\nEror! File name can't be empty");
+    return 0;
+  } else if (name == NULL)
+  {
+    DEBUG(dbgSys, "\nEror! Not enough memory in system");
+    return 0;
+  } else
+  {
+    if (!kernel->fileSystem->Create(name))
+    {
+      DEBUG(dbgSys, "\nEror creating file");
+      return 0;
+    } else
+    {
+       DEBUG(dbgSys, "\nCreated file successfully");
+       return 1;
+    }
+  }
+}
+
+OpenFileId Open(char *name)
+{
+  return (OpenFileId) kernel->fileSystem->Open(name);
+}
+
+int Close(OpenFileId id)
+{
+  return kernel->fileSystem->Close(id);
+}
+
 #endif /* ! __USERPROG_KSYSCALL_H__ */
+FileSystem 
