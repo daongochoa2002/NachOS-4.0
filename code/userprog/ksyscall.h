@@ -120,42 +120,72 @@ unsigned int SysRandomNum(){
   RandomInit(time(0));
   return RandomNumber();
 }
-
-int Create(char *name)
+//The create system call will use the
+//Nachos Filesystem Object Instance to create a zero length file. 
+int SysCreate(char *name)
 {
-  int lengthName = strlen(name);
-
-  if (lengthName == 0)
+  if (strlen(name) == 0)
   {
-    DEBUG(dbgSys, "\nEror! File name can't be empty");
-    return 0;
+    DEBUG(dbgSys, "\nError! File name can't be empty");
+    return -1;
   } else if (name == NULL)
   {
-    DEBUG(dbgSys, "\nEror! Not enough memory in system");
-    return 0;
+    DEBUG(dbgSys, "\nError! Not enough memory in system");
+    return -1;
   } else
   {
     if (!kernel->fileSystem->Create(name))
     {
-      DEBUG(dbgSys, "\nEror creating file");
-      return 0;
+      DEBUG(dbgSys, "\nError creating file");
+      return -1;
     } else
     {
        DEBUG(dbgSys, "\nCreated file successfully");
-       return 1;
+       return 0;
     }
   }
 }
-
-OpenFileId Open(char *name)
+//The Open system call returns the file descriptor id
+//(OpenFileID == an integer number), or –1 if the call fails. Open can fail for several reasons,
+//such as trying to open a file or mailbox that does not exist or if there is not enough room in the
+//file descriptor table. 
+OpenFileId SysOpen(char *name)
 {
   return (OpenFileId) kernel->fileSystem->Open(name);
 }
 
-int Close(OpenFileId id)
+int SysClose(OpenFileId id)
 {
-  return kernel->fileSystem->Close(id);
+  return (int) kernel->fileSystem->Close(id);
+}
+int SysRemove(char*name){
+  return (int) kernel->fileSystem->Remove(name);
 }
 
+int SysWrite(char *buffer, int size, OpenFileId id){
+  if(id==1)
+    return kernel->synchConsoleOut->PutString(buffer,size);
+  return kernel->fileSystem->Write(buffer,size,id);
+  
+}
+
+int SysRead(char *buffer, int size, OpenFileId id){
+  if(id==0)
+    return kernel->synchConsoleIn->GetString(buffer,size);
+  return kernel->fileSystem->Read(buffer,size,id);
+  
+}
+
+int SysSeek(int position, OpenFileId id){
+  //if position equal to -1 then move to the end of file
+  if(position==-1)
+    return kernel->fileSystem->Seek(EOF,id);
+  //
+  if (fileId <= 1) {
+    DEBUG(dbgSys, "\nCan't seek in console");
+    return -1;
+  }
+  return kernel->fileSystem->Seek(seekPos, fileId);
+}
 #endif /* ! __USERPROG_KSYSCALL_H__ */
 FileSystem 

@@ -45,13 +45,6 @@
 #define SC_PrintChar    48
 #define SC_ReadString   49
 #define SC_PrintString  50
-#define SC_Create 51
-#define SC_Open 52
-#define SC_Close    53
-#define SC_Read 54
-#define SC_Write    55
-#define SC_Seek 56
-#define SC_Remove   57
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos

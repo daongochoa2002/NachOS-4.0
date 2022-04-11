@@ -102,7 +102,6 @@ class FileSystem {
     int Seek(int position, int id) {
         return fileTable[FileTableIndex()]->Seek(position, id);
     }
-
     bool Remove(char *name) { return Unlink(name) == 0; }
 };
 

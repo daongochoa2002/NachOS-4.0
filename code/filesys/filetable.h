@@ -83,7 +83,6 @@ class FileTable {
         if (pos < 0 || pos > openFile[index]->Length()) return -1;
         return openFile[index]->Seek(pos);
     }
-
     ~FileTable() {
         for (int i = 0; i < FILE_MAX; i++) {
             if (openFile[i]) delete openFile[i];

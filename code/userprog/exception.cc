@@ -297,16 +297,18 @@ void ExceptionHandler(ExceptionType which)
 
 			break;
 		}
+		//The createfile system call will use the
+//Nachos Filesystem Object Instance to create a zero length file. Remember, the filename exists in
+//user space. This means the buffer that the user space pointer points to must be translated from
+//user memory space to system memory space. The createfile system call returns 0 for successful
+//completion, -1 for an error. 
 		case SC_Create:
 		{
 			int virtAddr = kernel->machine->ReadRegister(4);
 			int length = kernel->machine->ReadRegister(5);
 			char * fileName = User2System(virtAddr, length);
 
-			if (Create(fileName))
-				kernel->machine->WriteRegister(2, 0);
-			else
-				kernel->machine->WriteRegister(2, -1);
+			kernel->machine->WriteRegister(2, Create(fileName));
 			
 			delete[] fileName;
 			IncreasePC();
@@ -317,6 +319,7 @@ void ExceptionHandler(ExceptionType which)
 
 			break;
 		}
+
 		case SC_Open:
 		{
 			int virtAddr = kernel->machine->ReadRegister(4);
@@ -347,18 +350,72 @@ void ExceptionHandler(ExceptionType which)
 
 			break;
 		}
-		
-		// Cac system call chua duoc xu li thi se in ra thong bao loi
+		case SC_Remove:
+			int virtAddr = kernel->machine->ReadRegister(4);
+			int length=kernel->machine->ReadRegister(5);
+			char * fileName=User2System(virtAddr,length);
+			kernel->machine->WriteRegister(2,SysRemove(virtAddr));
+			IncreasePC();
+			return;
+			ASSERTNOTREACHED();
+			break;
+		case SC_Read:
+			int virtAddr = kernel->machine->ReadRegister(4);
+            int size = kernel->machine->ReadRegister(5);
+            int id = kernel->machine->ReadRegister(6);
+
+            char *buffer = User2System(virtAddr, size);
+
+            int res = SysRead(buffer, size, id);
+
+            kernel->machine->WriteRegister(2, res);
+            if (res != -1 && res != -2)
+                System2User(virtAddr, res, buffer);
+
+            delete buffer;
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		case SC_Write:
+			int virtAddr = kernel->machine->ReadRegister(4);
+            int size = kernel->machine->ReadRegister(5);
+            int id = kernel->machine->ReadRegister(6);
+
+            char *buffer = User2System(virtAddr, size);
+
+            int res = SysWrite(buffer, size, id);
+
+            kernel->machine->WriteRegister(2, res);
+            if (res != -1 && res != -2)
+                System2User(virtAddr, res, buffer);
+
+            delete buffer;
+            IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
+		case SC_Seek:
+			int pos=kernel->machine->ReadRegister(4);
+			int id=kernel->machine->ReadRegister(5);
+			kernel->machine->WriteRegister(2,(int) SysSeek(pos,id));
+			IncreasePC();
+
+			return;
+	
+			ASSERTNOTREACHED();
+
+			break;
 		case SC_Exit:
 		case SC_Exec:
-		case SC_Join:
-        
-		case SC_Remove:
-		
-		case SC_Read:
-		case SC_Write:
-		case SC_Seek:
-		case SC_Close:
+		case SC_Join:        
+
         case SC_ThreadFork:
         case SC_ThreadYield:
         case SC_ExecV:
