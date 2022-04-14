@@ -13,7 +13,8 @@
 
 #include "kernel.h"
 #include "synchconsole.h"
-#include "machine.h"
+#include <stdlib.h>
+
 
 
 void SysHalt()
@@ -26,7 +27,6 @@ int SysAdd(int op1, int op2)
 {
   return op1 + op2;
 }
-
 int SysSub(int op1, int op2)
 {
   return op1 - op2;
@@ -79,6 +79,7 @@ void SysPrintNum(int n){
     kernel->synchConsoleOut->PutChar(temp[j]);
 
 }
+
 char SysReadChar()
 {
   return kernel->synchConsoleIn->GetChar();
@@ -151,7 +152,8 @@ int SysCreate(char *name)
 //file descriptor table. 
 OpenFileId SysOpen(char *name)
 {
-  return (OpenFileId) kernel->fileSystem->Open(name);
+  Open
+  return (OpenFileId) kernel->fileSystem->Open(name,0);
 }
 
 int SysClose(OpenFileId id)
@@ -177,15 +179,10 @@ int SysRead(char *buffer, int size, OpenFileId id){
 }
 
 int SysSeek(int position, OpenFileId id){
-  //if position equal to -1 then move to the end of file
-  if(position==-1)
-    return kernel->fileSystem->Seek(EOF,id);
-  //
-  if (fileId <= 1) {
+  if (id <= 1) {
     DEBUG(dbgSys, "\nCan't seek in console");
     return -1;
   }
-  return kernel->fileSystem->Seek(seekPos, fileId);
+  return kernel->fileSystem->Seek(position, id);
 }
 #endif /* ! __USERPROG_KSYSCALL_H__ */
-FileSystem 

@@ -3,18 +3,18 @@ int
 main(){
     char a[255];
     char b[255];
+    char buffer[255];
+    OpenFileId id;
     PrintString("Enter the name of file1: ");
     ReadString(a,255);
     PrintString("Enter the name of file2: ");
     ReadString(b,255);
-    OpenFileID id=Open(a);
-    char *buffer=new char[255];
-    Read(buffer,255,id);
+    id=Open(a);
+    Read(buffer,3,id);
     Close(id);
     id=Open(b);
-    Write(buffer,255,id);
+    Write(buffer,3,id);
     Close(id);
-    delete[] buffer;
     Halt();
     return 0;
 }

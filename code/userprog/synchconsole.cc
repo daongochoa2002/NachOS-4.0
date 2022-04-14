@@ -52,10 +52,6 @@ SynchConsoleInput::GetChar()
     lock->Release();
     return ch;
 }
-//----------------------------------------------------------------------
-// SynchConsoleInput::GetString
-//      Read a string typed at the keyboard, waiting if necessary.
-//----------------------------------------------------------------------
 
 int
 SynchConsoleInput::GetString(char*buffer,int size)
@@ -73,6 +69,7 @@ SynchConsoleInput::GetString(char*buffer,int size)
     lock->Release();
     return size;
 }
+
 //----------------------------------------------------------------------
 // SynchConsoleInput::CallBack
 //      Interrupt handler called when keystroke is hit; wake up
@@ -125,10 +122,6 @@ SynchConsoleOutput::PutChar(char ch)
     waitFor->P();
     lock->Release();
 }
-//----------------------------------------------------------------------
-// SynchConsoleOutput::PutString
-//      Write a string to the console display, waiting if necessary.
-//----------------------------------------------------------------------
 
 int
 SynchConsoleOutput::PutString(char *buffer, int size)
@@ -139,7 +132,9 @@ SynchConsoleOutput::PutString(char *buffer, int size)
         waitFor->P();
     }
     lock->Release();
+    return size;
 }
+
 //----------------------------------------------------------------------
 // SynchConsoleOutput::CallBack
 //      Interrupt handler called when it's safe to send the next 

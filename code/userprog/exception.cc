@@ -25,7 +25,6 @@
 #include "main.h"
 #include "syscall.h"
 #include "ksyscall.h"
-#include "synchconsole.h"
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -48,14 +47,6 @@
 //	"which" is the kind of exception.  The list of possible exceptions 
 //	is in machine.h.
 //----------------------------------------------------------------------
-// Câu 2
-/* void IncreasePC()
-{
-	kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
-	kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(NextPCReg));
-	kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
-}
- */
 void IncreasePC(){
 	/* Modify return point */
 	{
@@ -116,12 +107,13 @@ int System2User(int virtAddr,int len,char* buffer)
 	do{ 
 		oneChar= (int) buffer[i]; 
 		kernel->machine->WriteMem(virtAddr+i,1,oneChar); 
-		i ++; 
+		i ++;
 	}while(i < len && oneChar != 0); 
 	return i; 
 } 
 
-void ExceptionHandler(ExceptionType which)
+void
+ExceptionHandler(ExceptionType which)
 {
     int type = kernel->machine->ReadRegister(2);
 
@@ -139,28 +131,25 @@ void ExceptionHandler(ExceptionType which)
 			break;
 
       	case SC_Add:
-		{
 			DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
 	
-			/* Process SysAdd Systemcall*/
+	/* Process SysAdd Systemcall*/
 			int result;
 			result = SysAdd(/* int op1 */(int)kernel->machine->ReadRegister(4),
 			/* int op2 */(int)kernel->machine->ReadRegister(5));
 
 			DEBUG(dbgSys, "Add returning with " << result << "\n");
-			/* Prepare Result */
+	/* Prepare Result */
 			kernel->machine->WriteRegister(2, (int)result);
 	
 			IncreasePC();
 
 			return;
-	
+
 			ASSERTNOTREACHED();
 
 			break;
-		}
-	   	case SC_Sub:
-		{
+		case SC_Sub:
 			DEBUG(dbgSys, "Sub " << kernel->machine->ReadRegister(4) << " - " << kernel->machine->ReadRegister(5) << "\n");
 	
 			/* Process SysSub Systemcall*/
@@ -179,7 +168,6 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		}
 		case SC_ReadNum:
 		{
 			DEBUG(dbgSys, "Read a number " << kernel->machine->ReadRegister(4) << "\n");
@@ -217,7 +205,8 @@ void ExceptionHandler(ExceptionType which)
 		}
 		case SC_ReadChar:
 		{
-			kernel->machine->WriteRegister(2, (int)SysReadChar());
+			int res=SysReadChar();
+			kernel->machine->WriteRegister(2, (int)res);
 								
 			IncreasePC();
 			
@@ -270,7 +259,6 @@ void ExceptionHandler(ExceptionType which)
 			buffer1 = User2System(virtAddr1, 255);
 			SysPrintString(buffer1);
 			delete[] buffer1;
-
 			IncreasePC();
 
 			return;
@@ -304,11 +292,11 @@ void ExceptionHandler(ExceptionType which)
 //completion, -1 for an error. 
 		case SC_Create:
 		{
-			int virtAddr = kernel->machine->ReadRegister(4);
-			int length = kernel->machine->ReadRegister(5);
-			char * fileName = User2System(virtAddr, length);
+			int virtAddr2 = kernel->machine->ReadRegister(4);
+			//int length = kernel->machine->ReadRegister(5);
+			char * fileName = User2System(virtAddr2, 255);
 
-			kernel->machine->WriteRegister(2, Create(fileName));
+			kernel->machine->WriteRegister(2, SysCreate(fileName));
 			
 			delete[] fileName;
 			IncreasePC();
@@ -322,11 +310,11 @@ void ExceptionHandler(ExceptionType which)
 
 		case SC_Open:
 		{
-			int virtAddr = kernel->machine->ReadRegister(4);
-			int length = kernel->machine->ReadRegister(5);
-			char * fileName = User2System(virtAddr, length);
+			int virtAddr3 = kernel->machine->ReadRegister(4);
+			//int length = kernel->machine->ReadRegister(5);
+			char * fileName = User2System(virtAddr3, 255);
 
-			kernel->machine->WriteRegister(2, Open(fileName));
+			kernel->machine->WriteRegister(2, SysOpen(fileName));
 
 			delete[] fileName;
 			IncreasePC();
@@ -340,7 +328,7 @@ void ExceptionHandler(ExceptionType which)
 		case SC_Close:
 		{
 			int id = kernel->machine->ReadRegister(4);
-			kernel->machine->WriteRegister(2, Close(id));
+			kernel->machine->WriteRegister(2, SysClose(id));
 
 			IncreasePC();
 
@@ -351,26 +339,30 @@ void ExceptionHandler(ExceptionType which)
 			break;
 		}
 		case SC_Remove:
+		{
 			int virtAddr = kernel->machine->ReadRegister(4);
-			int length=kernel->machine->ReadRegister(5);
-			char * fileName=User2System(virtAddr,length);
-			kernel->machine->WriteRegister(2,SysRemove(virtAddr));
+			//int length=kernel->machine->ReadRegister(5);
+			char * fileName=User2System(virtAddr,255);
+			int ans = SysRemove(fileName);
+			kernel->machine->WriteRegister(2,(int)ans);
 			IncreasePC();
 			return;
 			ASSERTNOTREACHED();
 			break;
+		}
 		case SC_Read:
-			int virtAddr = kernel->machine->ReadRegister(4);
+		{
+			int virtAddr5 = kernel->machine->ReadRegister(4);
             int size = kernel->machine->ReadRegister(5);
-            int id = kernel->machine->ReadRegister(6);
+            int id1 = kernel->machine->ReadRegister(6);
 
-            char *buffer = User2System(virtAddr, size);
+            char *buffer = User2System(virtAddr5, size);
 
-            int res = SysRead(buffer, size, id);
+            int res = SysRead(buffer, size, id1);
 
             kernel->machine->WriteRegister(2, res);
             if (res != -1 && res != -2)
-                System2User(virtAddr, res, buffer);
+                System2User(virtAddr5, res, buffer);
 
             delete buffer;
 			IncreasePC();
@@ -380,20 +372,23 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		}
 		case SC_Write:
-			int virtAddr = kernel->machine->ReadRegister(4);
-            int size = kernel->machine->ReadRegister(5);
+		{
+			int virtAddr6 = kernel->machine->ReadRegister(4);
+            int size2 = kernel->machine->ReadRegister(5);
             int id = kernel->machine->ReadRegister(6);
 
-            char *buffer = User2System(virtAddr, size);
+            char *buffer = User2System(virtAddr6, size2);
 
-            int res = SysWrite(buffer, size, id);
+            int answer= SysWrite(buffer, size2, id);
 
-            kernel->machine->WriteRegister(2, res);
-            if (res != -1 && res != -2)
-                System2User(virtAddr, res, buffer);
+            kernel->machine->WriteRegister(2, (int)answer);
+            if (answer != -1 && answer != -2)
+                System2User(virtAddr6, answer, buffer);
 
             delete buffer;
+			buffer=NULL;
             IncreasePC();
 
 			return;
@@ -401,10 +396,13 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
+		}
 		case SC_Seek:
+	  	{
 			int pos=kernel->machine->ReadRegister(4);
 			int id=kernel->machine->ReadRegister(5);
-			kernel->machine->WriteRegister(2,(int) SysSeek(pos,id));
+			int res=SysSeek(pos,id);
+			kernel->machine->WriteRegister(2,(int) res);
 			IncreasePC();
 
 			return;
@@ -412,39 +410,17 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 
 			break;
-		case SC_Exit:
-		case SC_Exec:
-		case SC_Join:        
-
-        case SC_ThreadFork:
-        case SC_ThreadYield:
-        case SC_ExecV:
-        case SC_ThreadExit:
-        case SC_ThreadJoin:
-            cerr << "Not yet implemented system call " << type << "\n";
-            SysHalt();
-            break;
-		
-      	default:
+		}
+      	default:{
 			cerr << "Unexpected system call " << type << "\n";
 			break;
-       }
-      break;
-
-	//Tất cả exceptions khác, HĐH hiển thị ra một thông báo lỗi và Halt hệ thống.
-    case PageFaultException:
-    case ReadOnlyException:
-    case BusErrorException:
-    case AddressErrorException:
-    case OverflowException:
-    case IllegalInstrException:
-    case NumExceptionTypes:
-        cerr << "Eror: " << which << "\n";
-        SysHalt();
-        break;
+		}
+	  }
+      	break;
     default:
       cerr << "Unexpected user mode exception" << (int)which << "\n";
       break;
     }
     ASSERTNOTREACHED();
+	
 }

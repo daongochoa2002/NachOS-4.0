@@ -60,7 +60,6 @@
 /* Stop Nachos, and print out performance stats */
 void Halt();		
  
- 
 /*
  * Add the two operants and return the result
  */ 
@@ -92,10 +91,7 @@ void PrintString(char[]);
 
 int RandomNum();
 
-
-/*
- * Write one num out the console
- */ 
+/* Address space control operations: Exit, Exec, Execv, and Join */
 
 /* This user program is done (status = 0 means exited normally). */
 void Exit(int status);	
@@ -141,8 +137,8 @@ typedef int OpenFileId;
  * the console device.
  */
 
-#define Console_Input	0 
-#define Console_Output	1 
+#define Consoleinput	0  
+#define Consoleoutput	1  
  
 /* Create a Nachos file, with name "name" */
 /* Note: Create does not open the file.   */

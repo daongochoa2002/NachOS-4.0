@@ -81,7 +81,8 @@ class FileTable {
         // use seek(-1) to move to the end of file
         if (pos == -1) pos = openFile[index]->Length();
         if (pos < 0 || pos > openFile[index]->Length()) return -1;
-        return openFile[index]->Seek(pos);
+        openFile[index]->Seek(pos);
+        return 0;
     }
     ~FileTable() {
         for (int i = 0; i < FILE_MAX; i++) {
