@@ -152,7 +152,6 @@ int SysCreate(char *name)
 //file descriptor table. 
 OpenFileId SysOpen(char *name)
 {
-  Open
   return (OpenFileId) kernel->fileSystem->Open(name,0);
 }
 
